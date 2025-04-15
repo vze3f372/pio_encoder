@@ -1,0 +1,8 @@
+.program quadrature_encoder
+
+.wrap_target
+    in pins, 2
+    push block
+    irq set 0
+.wrap
+
