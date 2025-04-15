@@ -22,15 +22,18 @@ add_executable(${PROJECT_NAME}
     led.cpp
     GpioPin.cpp
     EncoderRingBuffer.cpp
+    QuadratureEncoder.cpp
 )
 
 pico_generate_pio_header(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/quadrature_encoder.pio)
+pico_generate_pio_header(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/test_loop_push.pio)
+
 
 # Add pico_stdlib library which aggregates commonly used features
 target_link_libraries(${PROJECT_NAME} pico_stdlib)
 
 # create map/bin/hex/uf2 file in addition to ELF.
-#pico_add_extra_outputs(${PROJECT_NAME})
+pico_add_extra_outputs(${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME} 
     pico_stdlib

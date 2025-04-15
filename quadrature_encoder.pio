@@ -1,8 +1,11 @@
+
 .program quadrature_encoder
 
-.wrap_target
-    in pins, 2
+.wrap_target     
+	wait 1 pin 0
+	wait 0 pin 0
+    in pins, 2 
+	;in null, 30
     push block
     irq set 0
 .wrap
-
