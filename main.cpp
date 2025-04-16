@@ -53,7 +53,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 
 #include "EncoderRingBuffer.h"
 #include "LED.h"
@@ -64,8 +64,8 @@ int main() {
 #define ENCODER_PIO pio0
 #define ENCODER_SM 0
 #define ENCODER_IRQ PIO0_IRQ_0
-#define ENCODER_PIN_A 10
-#define ENCODER_PIN_B 11
+#define ENCODER_PIN_A 27
+#define ENCODER_PIN_B 28
 
 EncoderRingBuffer encoder_buffer;
 
@@ -84,7 +84,7 @@ void quadrature_encoder_program_init(PIO pio, uint sm, uint offset,
 void __isr encoder_irq_handler() {
     pio_interrupt_clear(ENCODER_PIO, 0);
 
-    isr_led->toggle();
+    // isr_led->toggle();
     ++irq_hits;
     uint8_t direction = 0;
     while (!pio_sm_is_rx_fifo_empty(pio0, ENCODER_SM)) {
@@ -110,8 +110,12 @@ void encoder_pio_init() {
 
 int main() {
     //   PIO pio = pio0;
-    LED led_debug(20);
-    isr_led = &led_debug;
+    // LED led_debug(20);
+    // isr_led = &led_debug;
+    const uint8_t led_mask = 0x01;
+    std::array<LED, 3> leds = {LED(22), LED(21), LED(20)};
+    uint64_t count = 0;
+
     uint offset = pio_add_program(ENCODER_PIO, &quadrature_encoder_program);
     pio_sm_config c = quadrature_encoder_program_get_default_config(offset);
 
@@ -131,11 +135,17 @@ int main() {
         while (encoder_buffer.pop(raw)) {
             int8_t value = static_cast<int8_t>(raw);
             encoder_position += value;
-            if (encoder_position > 100) {
-                encoder_position = 100;
+            if (encoder_position > 7) {
+                encoder_position = 7;
             } else if (encoder_position < 0) {
                 encoder_position = 0;
             }
+            size_t i = 0;
+            for (auto& led : leds) {
+                leds[i].value(encoder_position & (led_mask << i));
+                ++i;
+            }
+
             printf("Step: %+d | Position: %d\n", value, encoder_position);
         }
     }
@@ -189,14 +199,14 @@ int main() {
 }
 
 #endif
-#if 0
+#if 1
 #include "QuadratureEncoder.h"
 #include "hardware/irq.h"
 #include "hardware/pio.h"
 #include "pico/stdlib.h"
 #include "quadrature_encoder.pio.h"
 
-QuadratureEncoder* encoder_ptr = nullptr;  // 🌟 global pointer
+QuadratureEncoder* encoder_ptr = nullptr;
 
 void __isr encoder_irq_handler() {
     if (encoder_ptr) {
@@ -209,14 +219,13 @@ int main() {
     sleep_ms(500);
 
     static QuadratureEncoder encoder(pio0, 0, 10, 250000.0f);
-    encoder_ptr = &encoder;  // 🧠 assign before enabling PIO
-
-    // Instead of install_irq() in the class, do it here:
-    // irq_set_exclusive_handler(PIO0_IRQ_0, encoder_irq_handler);
-    // irq_set_enabled(PIO0_IRQ_0, true);
+    encoder_ptr = &encoder;
+    // Install the IRQ handler
+    irq_set_exclusive_handler(PIO0_IRQ_0, encoder_irq_handler);
+    irq_set_enabled(PIO0_IRQ_0, true);
+    pio_set_irq0_source_enabled(pio0, pis_interrupt0, true);
 
     encoder.init();
-
     int position = 0;
     while (true) {
         uint8_t val;
