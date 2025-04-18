@@ -1,7 +1,7 @@
 
 #pragma once
 #include <atomic>
-#include <cstddef>  // Add this line
+#include <cstddef>
 #include <cstdint>
 
 class EncoderRingBuffer {

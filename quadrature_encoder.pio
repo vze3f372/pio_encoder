@@ -1,11 +1,11 @@
 
 .program quadrature_encoder
 
-.wrap_target     
-	wait 1 pin 0
-	wait 0 pin 0
-    in pins, 2 
-	;in null, 30
-    push block
-    irq set 0
+.wrap_target
+    wait 1 pin 0      ; wait for A↑
+    wait 0 pin 0      ; wait for A↓
+    in   pins, 2      ; sample A/B
+    push block        ; push the data
+    irq  set 0        ; ← this is the only thing that raises intf0
 .wrap
+
