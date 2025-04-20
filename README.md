@@ -60,9 +60,80 @@ A lightweight C++ library and example for reading rotary quadrature encoders usi
 ## Building
 
 ```bash
-git clone https://github.com/youruser/pico-quadrature-encoder.git
-cd pico-quadrature-encoder
+git clone https://gitlab.metropolia.fi/josephh/pio_encoder.git
+cd pio_encoder
 mkdir build && cd build
 cmake -DPICO_BOARD=<board type> ..
 make -j$(nproc)
+```
+## Usage
+
+### Class Usage
+
+This project provides the `QuadratureEncoder` class for handling quadrature encoder inputs using PIO state machines. The `EncoderRingBuffer` class is used for storing step events in a lock-free, interrupt-safe buffer.
+
+### Instantiating an Encoder
+
+To create and initialize an encoder instance:
+
+```cpp
+QuadratureEncoder enc0(pio0, 0, 10);  // PIO0, state machine 0, encoder A on GPIO 10
+enc0.init();
+```
+### Optional Debug LED
+To enable an optional debug LED that toggles on each step:
+```cpp
+enc0.enableDebugLed(20);  // Debug LED on GPIO 20
+```
+### Reading Steps
+Once initialized, the encoder will automatically process input. You can read steps with the following code:
+```cpp
+uint8_t step;
+int64_t position = 0;
+while (enc0.buffer().pop(step)) {
+    position += static_cast<int8_t>(step);
+    printf("Encoder position: %lld\n", position);
+}
+```
+### Multiple Encoders (PIO0 + PIO1)
+
+You can instantiate up to 8 encoders using the two PIO blocks (PIO0 and PIO1), with 4 encoders per block:
+```cpp
+QuadratureEncoder enc0(pio0, 0, 10);
+QuadratureEncoder enc1(pio1, 3, 27);
+```
+### API Reference
+```cpp
+QuadratureEncoder::QuadratureEncoder(PIO pio, uint sm, uint pinA, float clkdiv)
+```
+Constructor for initializing the encoder on a given PIO state machine.
+
+- `pio` - The PIO block (either pio0 or pio1).
+- `sm` - The state machine number (0-3 per PIO block).
+- `pinA` - The GPIO pin connected to phase A of the encoder.
+- `clkdiv` - The clock divider for the state machine.
+
+```cpp
+void QuadratureEncoder::init()
+```
+Initializes the encoder, sets up the PIO state machine, and starts the interrupt handling.
+
+```cpp
+void QuadratureEncoder::enableDebugLed(uint32_t led_pin)
+```
+Enables the optional debug LED for this encoder.
+
+```cpp
+void QuadratureEncoder::disableDebugLed()
+   ```
+Disables the debug LED for this encoder.
+
+```cpp
+EncoderRingBuffer& QuadratureEncoder::buffer()
+```
+Returns the encoder's ring buffer, which holds the step events.
+
+### License (Beerware)
+This project is licensed under the Beerware License. Feel free to use it for your personal or commercial projects, and if you find it useful, buy me a beer someday.
+
 
