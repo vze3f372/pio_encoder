@@ -26,7 +26,7 @@ A lightweight C++ library and example for reading rotary quadrature encoders usi
 
 ## Features
 
-- Pure‑C++ wrapper around RP2040 PIO for quadrature decoding  
+- Pure‑C++ wrapper around RP2040/RP2350 PIO for quadrature decoding  
 - Hardware‑driven: uses PIO IRQ0 vector, minimal CPU overhead  
 - Supports up to 4 encoders on PIO0 and 4 on PIO1 (8 total)  
 - Interrupt‑safe ring buffer (`EncoderRingBuffer`) for step events  
