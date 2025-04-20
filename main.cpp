@@ -54,7 +54,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 
 #include <cstdio>
 #include <memory>
@@ -68,7 +68,7 @@ int main() {
     std::array<std::unique_ptr<LED>, 3> leds = {std::make_unique<LED>(22),
                                                 std::make_unique<LED>(21),
                                                 std::make_unique<LED>(20)};
-    static QuadratureEncoder encoder(pio0, 0, 27, 250000.0f);
+    static QuadratureEncoder encoder(pio0, 0, 10, 1.0f);
     encoder.init();
     const uint8_t led_mask = 0x01;
     int64_t position = 0;
@@ -86,6 +86,42 @@ int main() {
             printf("Step: %+d  Position: %lld\n", step, position);
         }
     }
+}
+
+#endif
+#if 1
+
+#include <array>
+#include <cstdio>
+
+#include "QuadratureEncoder.h"
+#include "pico/stdlib.h"
+
+int main() {
+    stdio_init_all();
+    sleep_ms(500);
+
+    QuadratureEncoder enc0(pio0, 0, 10);
+    QuadratureEncoder enc1(pio0, 3, 27);
+
+    enc0.enableDebugLed(20);
+
+    enc0.init();
+    enc1.init();
+
+    std::array<int64_t, 2> pos = {0, 0};
+    while (true) {
+        uint8_t step;
+        if (enc0.buffer().pop(step)) {
+            pos[0] += static_cast<int8_t>(step);
+            printf("E0 %+d → %lld\n", static_cast<int8_t>(step), pos[0]);
+        }
+        if (enc1.buffer().pop(step)) {
+            pos[1] += static_cast<int8_t>(step);
+            printf("E1 %+d → %lld\n", static_cast<int8_t>(step), pos[1]);
+        }
+    }
+    return 0;
 }
 
 #endif
