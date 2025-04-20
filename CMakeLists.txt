@@ -27,8 +27,6 @@ add_executable(${PROJECT_NAME}
 )
 
 pico_generate_pio_header(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/quadrature_encoder.pio)
-pico_generate_pio_header(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/test_loop_push.pio)
-pico_generate_pio_header(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/irq_tester.pio)
 
 # Add pico_stdlib library which aggregates commonly used features
 target_link_libraries(${PROJECT_NAME} pico_stdlib)
