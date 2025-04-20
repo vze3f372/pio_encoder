@@ -89,7 +89,7 @@ int main() {
 }
 
 #endif
-#if 1
+#if 0
 
 #include <array>
 #include <cstdio>
@@ -124,4 +124,37 @@ int main() {
     return 0;
 }
 
+#endif
+
+#if 1
+#include <cstdio>
+
+#include "QuadratureEncoder.h"
+#include "pico/stdlib.h"
+
+int main() {
+    stdio_init_all();
+    sleep_ms(500);
+
+    QuadratureEncoder enc0(pio0, 0, 10);
+    enc0.enableDebugLed(20);  // optional
+    enc0.init();
+
+    QuadratureEncoder enc1(pio1, 3, 27);
+    enc1.enableDebugLed(22);  // optional
+    enc1.init();
+
+    int64_t pos0 = 0, pos1 = 0;
+    while (true) {
+        uint8_t step;
+        while (enc0.buffer().pop(step)) {
+            pos0 += static_cast<int8_t>(step);
+            printf("E0 %+d → %lld\n", static_cast<int8_t>(step), pos0);
+        }
+        while (enc1.buffer().pop(step)) {
+            pos1 += static_cast<int8_t>(step);
+            printf("E1 %+d → %lld\n", static_cast<int8_t>(step), pos1);
+        }
+    }
+}
 #endif

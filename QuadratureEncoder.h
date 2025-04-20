@@ -2,7 +2,6 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
 
 #include "EncoderRingBuffer.h"
 #include "hardware/pio.h"
@@ -16,10 +15,10 @@ class QuadratureEncoder {
 
     void init();
 
-    EncoderRingBuffer& buffer() { return buffer_; }
-
     void enableDebugLed(uint32_t led_pin);
     void disableDebugLed();
+
+    EncoderRingBuffer& buffer() { return buffer_; }
 
     void process_irq();
 
@@ -34,6 +33,5 @@ class QuadratureEncoder {
     float clkdiv_;
     uint offset_;
     EncoderRingBuffer buffer_;
-
     uint32_t debugLedPin_;
 };
