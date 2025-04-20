@@ -50,7 +50,7 @@ A lightweight C++ library and example for reading rotary quadrature encoders usi
 
 ## Software Requirements
 
-- Raspberry Pi Pico SDK (2024.xx or later)  
+- Raspberry Pi Pico SDK (2.1.x or later)  
 - CMake ≥ 3.13  
 - GNU Make or Ninja  
 - ARM GCC toolchain (arm-none-eabi‑gcc)  
