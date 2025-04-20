@@ -17,7 +17,9 @@ A lightweight C++ library and example for reading rotary quadrature encoders usi
   - [Optional Debug LED](#optional-debug-led)  
   - [Reading Steps](#reading-steps)  
 - [Multiple Encoders (PIO0 + PIO1)](#multiple-encoders-pio0--pio1)  
-- [API Reference](#api-reference)  
+- [API Reference](#api-reference) 
+- [Project Structure](#project-structure)
+- [How to Use the Library in Another Project](#how-to-use-the-library-in-another-project)
 - [License (Beerware)](#license-beerware)
 
 ---
@@ -29,7 +31,7 @@ A lightweight C++ library and example for reading rotary quadrature encoders usi
 - Supports up to 4 encoders on PIO0 and 4 on PIO1 (8 total)  
 - Interrupt‑safe ring buffer (`EncoderRingBuffer`) for step events  
 - Optional per‑encoder debug LED toggle on activity  
-- Simple, idiomatic API with drop‑in `main.cpp` examples  
+- Simple, API with drop‑in `main.cpp` example  
 
 ---
 
@@ -132,6 +134,47 @@ Disables the debug LED for this encoder.
 EncoderRingBuffer& QuadratureEncoder::buffer()
 ```
 Returns the encoder's ring buffer, which holds the step events.
+
+### Project Structure
+The project structure is as follows
+```makefile
+.
+├── CMakeLists.txt        # Main CMake file for the project
+├── README.md             # Project documentation
+├── main.cpp              # Example main application code
+└── pio_encoder/          # Library for quadrature encoder handling
+    ├── CMakeLists.txt    # CMake file for the PIO encoder library
+    ├── examples/         # Example programs (optional)
+    ├── include/          # Header files for the library
+    │   ├── EncoderRingBuffer.h
+    │   ├── GpioPin.h
+    │   ├── QuadratureEncoder.h
+    │   └── led.h
+    └── src/              # Source files for the library
+        ├── EncoderRingBuffer.cpp
+        ├── GpioPin.cpp
+        ├── QuadratureEncoder.cpp
+        ├── led.cpp
+        └── quadrature_encoder.pio
+```
+### How to Use the Library in Another Project
+
+1. **Include the PIO Encoder Library**
+   - In your main project, add the pio_encoder library as a subdirectory:
+   - ```cmake 
+      add_subdirectory(pio_encoder)
+      ```
+2. **Link the Library**
+   - Link your project to the `pio_encoder` library: 
+   - ```cmake
+      target_link_libraries(your_target pio_encoder)
+      ```
+3. **Include the Headers**
+   - In your source files, include the necessary headers from the `pio_encoder` library:
+   - ```cpp
+      #include "QuadratureEncoder.h"
+      ```
+
 
 ### License (Beerware)
 This project is licensed under the Beerware License. Feel free to use it for your personal or commercial projects, and if you find it useful, buy me a beer someday.

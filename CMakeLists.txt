@@ -7,8 +7,7 @@ set(PICO_BOARD pico2_w)
 # Include the Raspberry Pi Pico SDK
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-# Initialize the Raspberry Pi Pico SDK
-project(blinky)
+project(encoder)
 
 # Set the C and C++ standards
 set(CMAKE_C_STANDARD 11)
@@ -34,8 +33,6 @@ target_link_libraries(${PROJECT_NAME}
     hardware_clocks
 )
 
-# Generate the PIO header file for quadrature_encoder.pio
-pico_generate_pio_header(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/pio_encoder/src/quadrature_encoder.pio)
 
 # Enable USB output, disable UART output
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
