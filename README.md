@@ -144,7 +144,6 @@ The project structure is as follows
 ├── main.cpp              # Example main application code
 └── pio_encoder/          # Library for quadrature encoder handling
     ├── CMakeLists.txt    # CMake file for the PIO encoder library
-    ├── examples/         # Example programs (optional)
     ├── include/          # Header files for the library
     │   ├── EncoderRingBuffer.h
     │   ├── GpioPin.h
