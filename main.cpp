@@ -54,7 +54,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 
 #include <cstdio>
 #include <memory>
@@ -68,7 +68,7 @@ int main() {
     std::array<std::unique_ptr<LED>, 3> leds = {std::make_unique<LED>(22),
                                                 std::make_unique<LED>(21),
                                                 std::make_unique<LED>(20)};
-    QuadratureEncoder encoder(pio0, 0, 10, 1.0f);
+    static QuadratureEncoder encoder(pio0, 0, 10, 1.0f);
     encoder.init();
     const uint8_t led_mask = 0x01;
     int64_t position = 0;
@@ -101,8 +101,8 @@ int main() {
     stdio_init_all();
     sleep_ms(500);
 
-    QuadratureEncoder enc0(pio0, 0, 10, 1.0f);
-    QuadratureEncoder enc1(pio0, 3, 27, 1.0f);
+    static QuadratureEncoder enc0(pio0, 0, 10, 1.0f);
+    static QuadratureEncoder enc1(pio0, 3, 27, 1.0f);
 
     enc0.enableDebugLed(20);
 
@@ -126,7 +126,7 @@ int main() {
 
 #endif
 
-#if 0
+#if 1
 #include <cstdio>
 
 #include "QuadratureEncoder.h"
@@ -136,11 +136,11 @@ int main() {
     stdio_init_all();
     sleep_ms(500);
 
-    QuadratureEncoder enc0(pio0, 0, 10);
+    static QuadratureEncoder enc0(pio0, 0, 10);
     enc0.enableDebugLed(20);  // optional
     enc0.init();
 
-    QuadratureEncoder enc1(pio1, 3, 27);
+    static QuadratureEncoder enc1(pio1, 3, 27);
     enc1.enableDebugLed(22);  // optional
     enc1.init();
 

@@ -7,3 +7,4 @@ build-*
 .DS_Store
 *.pdf
 .clangd
+compile_commands.json
