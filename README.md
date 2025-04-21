@@ -3,7 +3,7 @@
 
 ![PIOQuadratureEncoder Logo](assets/pio_encoder_banner.png)
 
-A lightweight C++ library and example for reading rotary quadrature encoders using the RP2040’s PIO hardware, with support for up to **4 state‑machines per PIO block** (8 total on PIO0 + PIO1), an optional per‑encoder debug LED, and a lock‑free ring buffer.
+A lightweight C++ library and example for reading rotary quadrature encoders using the RP2040/2350’s PIO hardware, with support for up to **4 state‑machines per PIO block** (8 total on PIO0 + PIO1), an optional per‑encoder debug LED, and a lock‑free ring buffer.
 
 ---
 
