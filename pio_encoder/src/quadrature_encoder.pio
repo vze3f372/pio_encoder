@@ -2,10 +2,10 @@
 .program quadrature_encoder
 
 .wrap_target
-    wait 1 pin 0      ; wait for A↑
-    wait 0 pin 0      ; wait for A↓
-    in   pins, 2      ; sample A/B
+    wait 1 pin 0      ; wait for high signal on channel A
+    wait 0 pin 0      ; wait for low signal on channel A
+    in   pins, 2      ; sample channels A and B
     push block        ; push the data
-    irq  set 0        ; ← this is the only thing that raises intf0
+    irq  set 0        ; Trigger interrupt  
 .wrap
 
